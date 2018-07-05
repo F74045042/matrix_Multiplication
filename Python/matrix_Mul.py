@@ -17,6 +17,12 @@ def parallelMul(first):
 				C[i][j] += A[i][k] * B[k][j]
 	return C
 
+def optimize(first):
+	for i in range(first, first+part):
+		for k in range(B.shape[1]):
+			for j in range(A.shape[1]):
+				C[i][j] += A[i][k] * B[k][j]
+	return C
 
 def main():
 	global part, A, B, C
@@ -64,6 +70,19 @@ def main():
 	#print(C)
 	#print the time result
 	str = "Parallel: %f sec" %(end - start)
+	print(str)
+
+	#Optimize
+	part = int(A.shape[0] / multiprocessing.cpu_count())
+	if part < 1:
+		part = 1
+	start = time.time()
+	pool = multiprocessing.Pool()
+	pool.map(optimize, range(0, A.shape[0], part))
+	end = time.time()
+	#print(C)
+	#print the time result
+	str = "Optimize: %f sec" %(end - start)
 	print(str)
 
 	#Print Ans Matrix
